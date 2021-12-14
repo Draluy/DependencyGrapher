@@ -36,7 +36,7 @@ fun App() {
                     val absPath = jFileChooser.selectedFile.absolutePath
                     val dependencies = ProjectDependencyAnalyzer().analyze(Paths.get(absPath))
                     val indexUri = PlantUmlGrapher().createGraph(dependencies)
-                    Desktop.getDesktop().browse(indexUri)
+                    Desktop.getDesktop().browse(indexUri);
                 }
             }) {
                 Text(text)
