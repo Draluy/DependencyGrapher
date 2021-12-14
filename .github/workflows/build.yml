@@ -60,3 +60,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build/libs/DependencyGrapher-1.0.jar
           asset_name: DependencyGrapher-1.0.jar
+          asset_content_type: application/java-archive
