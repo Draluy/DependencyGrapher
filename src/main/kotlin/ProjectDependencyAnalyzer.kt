@@ -13,13 +13,6 @@ import kotlin.io.path.isDirectory
 
 class ProjectDependencyAnalyzer {
 
-    init{
-        val combinedTypeSolver = CombinedTypeSolver()
-        combinedTypeSolver.add(ReflectionTypeSolver())
-        val symbolSolver = JavaSymbolSolver(combinedTypeSolver)
-        StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver)
-    }
-
     fun analyze(folder: Path): List<Dependencies> {
         checkDirIsKosher(folder)
         val files = listFiles(folder)
