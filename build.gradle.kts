@@ -25,6 +25,8 @@ tasks.withType<Jar> {
     manifest {
         attributes["Main-Class"] = "MainKt"
     }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
 
 tasks.withType<KotlinCompile> {
