@@ -1,5 +1,6 @@
 package parsing
 
+import com.github.javaparser.ParserConfiguration
 import com.github.javaparser.StaticJavaParser
 import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.ImportDeclaration
@@ -17,6 +18,9 @@ class DependencyFinder (filePath: Path){
     val relevantAnnotations = listOf("Autowired", "Inject")
 
     init {
+        StaticJavaParser.setConfiguration(
+            ParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_17)
+        )
         compilationUnit = StaticJavaParser.parse(filePath)
     }
 

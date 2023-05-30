@@ -1,13 +1,8 @@
-import com.github.javaparser.StaticJavaParser
-import com.github.javaparser.symbolsolver.JavaSymbolSolver
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver
 import exploring.DirExplorer
 import exploring.JavaFileHandler
 import exploring.JavaFilter
 import parsing.Dependencies
 import parsing.DependencyFinder
-import java.lang.IllegalArgumentException
 import java.nio.file.Path
 import kotlin.io.path.isDirectory
 
