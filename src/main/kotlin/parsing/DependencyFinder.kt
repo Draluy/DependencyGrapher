@@ -8,6 +8,7 @@ import com.github.javaparser.ast.Node
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.ConstructorDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
+import com.github.javaparser.ast.body.TypeDeclaration
 import com.github.javaparser.ast.type.Type
 import java.nio.file.Path
 
@@ -24,11 +25,13 @@ class DependencyFinder (filePath: Path){
         compilationUnit = StaticJavaParser.parse(filePath)
     }
 
-    fun getClasses(): List<ClassOrInterfaceDeclaration> {
-        return compilationUnit.findAll(ClassOrInterfaceDeclaration::class.java)
+    fun getClasses(): List<TypeDeclaration<*>> {
+        val classes =  compilationUnit.findAll(ClassOrInterfaceDeclaration::class.java)
+
+        return classes
     }
 
-    fun findDependencies(allClasses: List<ClassOrInterfaceDeclaration>): Dependencies {
+    fun findDependencies(allClasses: List<TypeDeclaration<*>>): Dependencies {
         val constructors = getRelevantConstructors()
         val fields = getRelevantFields()
 
@@ -38,8 +41,9 @@ class DependencyFinder (filePath: Path){
 
         val thisClassDependencies = dependencies + fieldDependencies
 
-        println("class ${getClasses().map { c -> c.nameAsString }} , found ${thisClassDependencies.map{cd -> cd.asString()}}")
-        return Dependencies(getClasses().get(0), thisClassDependencies)
+        val classes = getClasses()
+        println("class ${classes.map { c -> c.nameAsString }} , found ${thisClassDependencies.map{ cd -> cd.asString()}}")
+        return Dependencies(classes.get(0), thisClassDependencies)
     }
 
     private fun getRelevantConstructors(): List<ConstructorDeclaration> {
@@ -57,7 +61,7 @@ class DependencyFinder (filePath: Path){
 
     private fun getPossibleDependenciesFromConstructors(
         constructors: List<ConstructorDeclaration>,
-        allClasses: List<ClassOrInterfaceDeclaration>
+        allClasses: List<TypeDeclaration<*>>
     ): List<Type> {
         return constructors.flatMap { constructor ->
             constructor.parameters.filter { parameter ->
@@ -70,7 +74,7 @@ class DependencyFinder (filePath: Path){
 
     private fun getPossibleDependenciesFromFields(
         fields: List<FieldDeclaration>,
-        allClasses: List<ClassOrInterfaceDeclaration>
+        allClasses: List<TypeDeclaration<*>>
     ): List<Type> {
         return fields.filter { field ->
             allClasses.any { detectedClass ->

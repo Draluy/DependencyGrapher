@@ -11,7 +11,9 @@ class ProjectDependencyAnalyzer {
     fun analyze(folder: Path): List<Dependencies> {
         checkDirIsKosher(folder)
         val files = listFiles(folder)
+            .filter { DependencyFinder(it).getClasses().isNotEmpty() }
         val allClasses = files.flatMap { path -> DependencyFinder(path).getClasses() }
+
         return files.map { path ->
             DependencyFinder(path).findDependencies(allClasses)
         }
